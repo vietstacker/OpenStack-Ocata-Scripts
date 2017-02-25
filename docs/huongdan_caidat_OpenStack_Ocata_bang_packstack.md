@@ -6,11 +6,11 @@
 
 ### Mô hình
 
-![topology](../imagegs/topo-openstack-ocata.png)
+![topology](../images/topo-openstack-ocata.png)
 
 ### IP Planning
 
-![ipplanning](///imagegs/topo-openstack-ocata.png)
+![ipplanning](../images/topo-openstack-ocata.png)
 
 ### Các bước chuẩn bị trên trên Controller
 
