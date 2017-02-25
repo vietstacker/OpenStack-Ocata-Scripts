@@ -6,11 +6,11 @@
 
 ### Mô hình
 
-![topology](/imagegs/topo-openstack-ocata.png)
+![topology](../imagegs/topo-openstack-ocata.png)
 
 ### IP Planning
 
-![ipplanning](/imagegs/topo-openstack-ocata.png)
+![ipplanning](///imagegs/topo-openstack-ocata.png)
 
 ### Các bước chuẩn bị trên trên Controller
 
@@ -103,7 +103,13 @@
 
 ### Bắt đầu cài đặt `packstack` trên trên Controller
 
-- Cài đặt với mô hình Provider network và self service network
+- Cài đặt với mô hình Provider network và self service network. Lưu ý: khi cài xong bước này, máy ảo có thể gắn vào dải `provider` hoặc `selfservice`
+- SSH vào máy chủ Controller
+- Sử dụng lệnh dưới để cài OpenStack.
+- Khi cài, màn hình sẽ yêu cầu nhập mật khẩu của các máy COM1 và COM2, packstack sẽ tự động cài trên các máy này mà ko cần thao tác.
+
+- Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
+
 
     ```sh
     packstack --allinone \
@@ -124,13 +130,7 @@
         --os-compute-hosts=172.16.69.31 \
         --os-neutron-ovs-tunnel-if=eno16777728 \
         --provision-demo=n
-
-- SSH vào máy chủ Controller
-- Sử dụng lệnh dưới để cài OpenStack.
-- Khi cài, màn hình sẽ yêu cầu nhập mật khẩu của các máy COM1 và COM2, packstack sẽ tự động cài trên các máy này mà ko cần thao tác.
-
-- Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
-
+	```
 
 ###  Upload images, tạo network, chỉnh rule
 
