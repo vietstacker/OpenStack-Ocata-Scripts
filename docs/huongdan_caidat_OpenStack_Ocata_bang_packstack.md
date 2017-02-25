@@ -1,5 +1,16 @@
 ### Hương dẫn cài đặt OpenStack Ocata bằng Packstack trên CENTOS 7.x
 
+## Giới thiệu
+
+- Packstack là một công cụ cài đặt OpenStack nhanh chóng.
+- Packstack được phát triển bởi redhat
+- Chỉ hỗ trợ các distro: RHEL, Centos
+- Tự động hóa các bước cài đặt và lựa chọn thành phần cài đặt.
+- Nhanh chóng dựng được môi trường OpenStack để sử dụng làm PoC nội bộ, demo khách hàng, test tính năng.
+- Nhược điểm 1 : Đóng kín các bước cài đối với người mới.
+- Nhược điểm 2: Khó bug các lỗi khi cài vì đã được đóng gói cùng với các tool cài đặt tự động (puppet)
+
+
 ## Chuẩn bị
 
 - Distro: CentOS 7.x
