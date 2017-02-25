@@ -10,7 +10,7 @@
 
 ### IP Planning
 
-![ipplanning](../images/topo-openstack-ocata.png)
+![ipplanning](../images/ipplanning.png)
 
 ### Các bước chuẩn bị trên trên Controller
 
