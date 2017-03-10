@@ -78,7 +78,7 @@
     EOF
     ```
 
-- Nếu cần thì khởi động lại network trên máy Controller, sau khi khởi động thì đăng nhập bằng IP của dải MGNT (`ens33: 10.10.10.50`)
+- Nếu cần thì khởi động lại network trên máy Controller, sau khi khởi động thì đăng nhập bằng IP của dải MGNT (`ens33: 10.10.10.50`).
     ```sh
     systemctl restart networking
     ```
@@ -86,29 +86,28 @@
 ## Cài đặt NTP server (Network Time Protocol) trên Controller
 
 - Cài đặt gói `chrony` cho NTP server
-```sh
- apt install -y chrony
- ```
+    ```sh
+     apt install -y chrony
+    ```
 
 - Sao lưu file cấu hình của NTP Server
-```sh
-cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig
-```
+    ```sh
+    cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.orig
+    ```
 
 - Cấu hình NTP server
-```sh
-echo "server 1.vn.pool.ntp.org iburst 
-server 0.asia.pool.ntp.org iburst 
-server 3.asia.pool.ntp.org iburst
+    ```sh
+    echo "server 1.vn.pool.ntp.org iburst 
+    server 0.asia.pool.ntp.org iburst 
+    server 3.asia.pool.ntp.org iburst
 
-allow 10.10.10.0/24" >> /etc/chrony/chrony.conf
-```
+    allow 10.10.10.0/24" >> /etc/chrony/chrony.conf
+    ```
 
 - Khởi động lại dịch vụ NTP trên Controller
-
-```sh
-serivce chrony restart
-```
+    ```sh
+    serivce chrony restart
+    ```
 
 - Kiểm tra dịch vụ NTP đã hoạt động hay chưa
     ```sh
@@ -140,10 +139,73 @@ serivce chrony restart
     apt install -y software-properties-common
     add-apt-repository -y cloud-archive:ocata
     ```
-- Thực hiện update máy chủ Controller sau khi khai báo repos
+- Thực hiện update máy chủ Controller sau khi khai báo repos và khởi động lại máy chủ.
+    ```sh
+    apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && init 6
+    ```
 
-```sh
-apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
-```
+- Đăng nhập với vào máy chủ Controller và chuyển sang quyền root
+    ```sh
+    su -
+    ```
 
+- Cài đặt gói OpenStack Client
+    ```sh
+    apt install -y python-openstackclient
+    ```
+
+## Cài đặt SQL Server (hướng dẫn này sử dụng MaraiDB)
+
+- Cài đặt gói của MariaDB
+    ```sh
+    apt install -y mariadb-server python-pymysql
+    ```
+
+- Tạo file cấu hình MariaDB dành cho các databasse OpenStack
+    ```sh
+    echo << EOF > /etc/mysql/mariadb.conf.d/99-openstack.cnf
+    [mysqld]
+    bind-address = 10.10.10.50
+
+    default-storage-engine = innodb
+    innodb_file_per_table = on
+    max_connections = 4096
+    collation-server = utf8_general_ci
+    character-set-server = utf8
+    ```
+
+- Khởi động lại dịch vụ MariaDB
+    ```sh
+    service mysql restart
+    ```
+
+- Bỏ qua bước thiết lập các bảo mật cho MariaDB (sẽ thực hiện sau)
+
+## Cài đặt Message queue (RabbitMQ)
+
+- Tải gói rabbitmq
+    ```sh
+     apt install -y rabbitmq-server
+    ```
+
+- Tạo user `openstack` cho rabbitmq với mật khẩu là `VietStack789`
+    ```sh
+    rabbitmqctl add_user openstack VietStack789
+    ```
+
+- Phân quyền trong rabbitmq đối với user `openstack` vừa tạo
+    ```sh
+    rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+    ```
+
+## Cài đặt `Memcached`
+
+- Tải gói `memcached`
+    ```sh
+    apt install memcached python-memcache
+    ```
+
+- Cấu hình memcached.
+
+- Khởi động lại memcached
 
