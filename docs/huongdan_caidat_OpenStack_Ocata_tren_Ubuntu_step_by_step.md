@@ -188,9 +188,9 @@
      apt install -y rabbitmq-server
     ```
 
-- Tạo user `openstack` cho rabbitmq với mật khẩu là `VietStack789`
+- Tạo user `openstack` cho rabbitmq với mật khẩu là `VietStack6789`
     ```sh
-    rabbitmqctl add_user openstack VietStack789
+    rabbitmqctl add_user openstack VietStack6789
     ```
 
 - Phân quyền trong rabbitmq đối với user `openstack` vừa tạo
