@@ -156,6 +156,13 @@
 
 ## Cài đặt SQL Server (hướng dẫn này sử dụng MaraiDB)
 
+- Khai báo mật khẩu cho tài khoản `root` trong MariaDB
+    ```sh
+    echo mariadb-server-10.0 mysql-server/root_password VietStack6789 | \
+        debconf-set-selections
+    echo mariadb-server-10.0 mysql-server/root_password_again VietStack6789 | \
+        debconf-set-selections
+
 - Cài đặt gói của MariaDB
     ```sh
     apt install -y mariadb-server python-pymysql
@@ -165,14 +172,19 @@
     ```sh
     echo << EOF > /etc/mysql/mariadb.conf.d/99-openstack.cnf
     [mysqld]
-    bind-address = 10.10.10.50
+    bind-address = 0.0.0.0
 
     default-storage-engine = innodb
     innodb_file_per_table = on
     max_connections = 4096
     collation-server = utf8_general_ci
     character-set-server = utf8
+    EOF
     ```
+
+mysql -u root -e'source /root/config.sql'
+rm -rf /root/config.sql
+```
 
 - Khởi động lại dịch vụ MariaDB
     ```sh
@@ -202,10 +214,36 @@
 
 - Tải gói `memcached`
     ```sh
-    apt install memcached python-memcache
+    apt install -y memcached python-memcache
     ```
 
-- Cấu hình memcached.
+- Cấu hình memcached
+    ```sh
+    cp /etc/memcached.conf /etc/memcached.conf.orig
+
+    sed -i 's/-l 127.0.0.1/-l 10.10.10.50/g' /etc/memcached.conf
+    ```
 
 - Khởi động lại memcached
+    ```sh
+    systemctl enable memcached.service
+    systemctl start memcached.service
+    ```
 
+- 
+
+# Keystone trên Controller
+## Cài đặt và cấu hình Keystone
+### Tạo database cho keystone
+
+- Tạo database cho keystone
+    ```sh
+    cat << EOF | mysql -uroot -pVietStack6789
+    CREATE DATABASE keystone default character set utf8;
+    GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'VietStack6789' WITH GRANT OPTION;
+    GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'VietStack6789' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+    EOF
+    ```
+
+### Cài đặt và cấu hình keystone
